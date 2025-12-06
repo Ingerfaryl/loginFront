@@ -11,6 +11,10 @@ import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { MessageModule } from 'primeng/message';
 
+import { LoginService } from './services/login';
+import { LoginRequest } from './interfaces/login-request.interface';
+import { LoginResponse } from './interfaces/login-response.interface';
+
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -30,8 +34,9 @@ import { MessageModule } from 'primeng/message';
 export class Login {
   loginForm: FormGroup;
   loading = false;
+  serverError: string | null = null;
 
-  constructor(private fb: FormBuilder, private router: Router) {
+  constructor(private fb: FormBuilder, private router: Router, private loginService: LoginService) {
     this.loginForm = this.fb.group({
       username: ['', [Validators.required]],
       password: ['', [Validators.required, Validators.minLength(6)]],
@@ -40,18 +45,43 @@ export class Login {
   }
 
   onSubmit() {
-    if (this.loginForm.valid) {
-      this.loading = true;
-      console.log('Login data:', this.loginForm.value);
-
-      setTimeout(() => {
-        this.loading = false;
-      }, 1500);
-    } else {
+    if (this.loginForm.invalid) {
       Object.keys(this.loginForm.controls).forEach((key) => {
         this.loginForm.get(key)?.markAsTouched();
       });
+      return;
     }
+
+    this.loading = true;
+    this.serverError = null;
+
+    const request: LoginRequest = {
+      usuario: this.loginForm.value.username,
+      contraseña: this.loginForm.value.password,
+    };
+
+    this.loginService.login(request).subscribe({
+      next: (resp: LoginResponse) => {
+        this.loading = false;
+
+        if (!resp.success) {
+          this.serverError = resp.message;
+          return;
+        }
+
+        // Guardar usuario y permisos en localStorage
+        localStorage.setItem('usuario', JSON.stringify(resp.usuario));
+        localStorage.setItem('permisos', JSON.stringify(resp.permisos));
+
+        // Redireccionar al dashboard
+        this.router.navigate(['/dashboard']);
+      },
+      error: (err) => {
+        this.loading = false;
+        this.serverError = 'Error en el servidor.';
+        console.error(err);
+      }
+    });
   }
 
   isInvalid(fieldName: string): boolean {
