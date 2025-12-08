@@ -11,7 +11,7 @@ import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { MessageModule } from 'primeng/message';
 
-import { LoginService } from './services/login';
+import { AuthService, LoginService } from './services/login';
 import { LoginRequest } from './interfaces/login-request.interface';
 import { LoginResponse } from './interfaces/login-response.interface';
 
@@ -26,7 +26,7 @@ import { LoginResponse } from './interfaces/login-response.interface';
     PasswordModule,
     ButtonModule,
     CheckboxModule,
-    MessageModule, // ← AGREGA ESTO
+    MessageModule,
   ],
   templateUrl: './login.html',
   styleUrl: './login.css',
@@ -36,7 +36,7 @@ export class Login {
   loading = false;
   serverError: string | null = null;
 
-  constructor(private fb: FormBuilder, private router: Router, private loginService: LoginService) {
+  constructor(private fb: FormBuilder, private router: Router, private loginService: LoginService, private authService: AuthService) {
     this.loginForm = this.fb.group({
       username: ['', [Validators.required]],
       password: ['', [Validators.required, Validators.minLength(6)]],
@@ -70,8 +70,7 @@ export class Login {
         }
 
         // Guardar usuario y permisos en localStorage
-        localStorage.setItem('usuario', JSON.stringify(resp.usuario));
-        localStorage.setItem('permisos', JSON.stringify(resp.permisos));
+        this.authService.guardarDatos(resp.usuario, resp.permisos ?? []);
 
         // Redireccionar al dashboard
         this.router.navigate(['/dashboard']);
