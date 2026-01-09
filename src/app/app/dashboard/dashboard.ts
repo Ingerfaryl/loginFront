@@ -40,7 +40,6 @@ import { NavbarComponent } from '../navbar/navbar';
     NavbarComponent
   ],
   templateUrl: './dashboard.html',
-  styleUrls: ['./dashboard.css'],
   providers: [ConfirmationService, MessageService]
 })
 export class Dashboard implements OnInit {

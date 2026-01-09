@@ -1,5 +1,5 @@
 // navbar.component.ts
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -29,9 +29,9 @@ import { AuthService } from '../../auth/login/services/login';
     DividerModule,
     RippleModule
   ],
-  templateUrl: './navbar.html',
-  styleUrls: ['./navbar.css']
+  templateUrl: './navbar.html'
 })
+
 export class NavbarComponent implements OnInit {
   userInitial: string = '';
   userName: string = '';
