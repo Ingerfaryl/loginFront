@@ -59,11 +59,6 @@ export class NavbarComponent implements OnInit {
     }
   }
 
-  toggleSidebar(): void {
-    // Emitir evento para toggle del sidebar
-    console.log('Toggle sidebar');
-  }
-
   goToProfile(popover: any): void {
     this.router.navigate(['/perfil']);
     popover.hide();

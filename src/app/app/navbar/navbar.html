@@ -1,97 +1,57 @@
-<div class="bg-white shadow-md border-b sticky top-0 z-50">
-  <div class="flex items-center justify-between px-6 py-3">
-    
-    <!-- Logo / Título -->
-    <div class="flex items-center gap-3">
-      
-    </div>
+<div class="flex items-center justify-end px-6 py-3 w-full bg-gray-300 shadow-md">
+  <!-- Sección derecha -->
+  <div class="flex items-center gap-4">
 
-    <!-- Sección derecha -->
-    <div class="flex items-center gap-4">
-      
-      <!-- Buscador -->
-      <span class="p-input-icon-left">
-        <i class="pi pi-search"></i>
-        <input 
-          type="text" 
-          pInputText 
-          placeholder="Buscar..." 
-          class="w-64"
-          [(ngModel)]="searchQuery" />
-      </span>
-      <!-- Avatar con menú -->
-      <div class="relative">
-        <!-- Popover (Menú desplegable) -->
-        <p-popover #op>
-          <div class="flex flex-col" style="width: 280px;">
-            
-            <!-- Información del usuario -->
-            <div class="flex items-center gap-3 p-3 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-t-lg">
-              <p-avatar 
-                [label]="userInitial" 
-                size="large"
-                [style]="{'background-color': '#ffffff', 'color': '#6366f1', 'font-weight': '700'}">
-              </p-avatar>
-              <div class="flex-1 text-white">
-                <div class="font-semibold text-base">{{ userName }}</div>
-                <div class="text-xs opacity-90">{{ userEmail }}</div>
-              </div>
+    <!-- Buscador -->
+    <input type="text" 
+       pInputText 
+       placeholder="Buscar..." 
+       class="w-full max-w-xs bg-white text-gray-900" 
+       [(ngModel)]="searchQuery" />
+    <!-- Avatar con menú -->
+    <div class="relative">
+      <!-- Popover (Menú desplegable) -->
+      <p-popover #op >
+        <div class="flex flex-col" style="width: 280px;">
+
+          <!-- Información del usuario -->
+          <div class="flex items-center gap-3 p-3 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-t-lg">
+            <p-avatar [label]="userInitial" size="large"
+              [style]="{'background-color': '#ffffff', 'color': '#6366f1', 'font-weight': '700'}">
+            </p-avatar>
+            <div class="flex-1 text-white">
+              <div class="font-semibold text-base">{{ userName }}</div>
+              <div class="text-xs opacity-90">{{ userEmail }}</div>
             </div>
-
-            <p-divider class="my-0"></p-divider>
-
-            <!-- Opciones del menú -->
-            <div class="flex flex-col gap-1 p-2">
-              
-              <button 
-                pButton 
-                label="Mi Perfil" 
-                icon="pi pi-user" 
-                class="p-button-text justify-start"
-                (click)="goToProfile(op)">
-              </button>
-
-              <button 
-                pButton 
-                label="Configuración" 
-                icon="pi pi-cog" 
-                class="p-button-text justify-start"
-                (click)="goToSettings(op)">
-              </button>
-
-              <button 
-                pButton 
-                label="Ayuda" 
-                icon="pi pi-question-circle" 
-                class="p-button-text justify-start"
-                (click)="goToHelp(op)">
-              </button>
-
-              <p-divider class="my-1"></p-divider>
-
-              <button 
-                pButton 
-                label="Cerrar Sesión" 
-                icon="pi pi-sign-out" 
-                class="p-button-text p-button-danger justify-start"
-                (click)="logout(op)">
-              </button>
-            </div>
-
           </div>
-        </p-popover>
 
-        <!-- Avatar que abre el popover -->
-        <p-avatar 
-          [label]="userInitial" 
-          styleClass="cursor-pointer"
-          [style]="{'background-color': '#6366f1', 'color': '#ffffff', 'font-weight': '600'}"
-          size="large"
-          shape="circle"
-          (click)="op.toggle($event)">
-        </p-avatar>
-      </div>
+          <p-divider class="my-0"></p-divider>
 
+          <!-- Opciones del menú -->
+          <div class="flex flex-col gap-1 p-2">
+
+            <button pButton label="Mi Perfil" icon="pi pi-user" class="p-button-text justify-start"
+              (click)="goToProfile(op)">
+            </button>
+
+            <button pButton label="Configuración" icon="pi pi-cog" class="p-button-text justify-start"
+              (click)="goToSettings(op)">
+            </button>
+
+            <p-divider class="my-1"></p-divider>
+
+            <button pButton label="Cerrar Sesión" icon="pi pi-sign-out"
+              class="p-button-text p-button-danger justify-start" (click)="logout(op)">
+            </button>
+          </div>
+
+        </div>
+      </p-popover>
+
+      <!-- Avatar que abre el popover -->
+      <p-avatar [label]="userInitial" size="large" shape="circle" (click)="op.toggle($event)">
+      </p-avatar>
     </div>
+
   </div>
 </div>

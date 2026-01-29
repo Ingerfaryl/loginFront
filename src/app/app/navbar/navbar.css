@@ -1,4 +1,4 @@
-:host ::ng-deep {
+/* :host ::ng-deep {
   .p-button.justify-start {
     justify-content: flex-start;
     width: 100%;
@@ -25,4 +25,4 @@
   .p-avatar:hover {
     transform: scale(1.05);
   }
-}
+} */
