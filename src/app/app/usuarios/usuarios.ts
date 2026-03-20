@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { FloatLabel } from 'primeng/floatlabel';
@@ -6,6 +6,7 @@ import { SelectModule } from 'primeng/select';
 import { FormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { TableModule } from 'primeng/table';
 
 import { PerfilService } from '../perfil/services/perfil';
 import { perfilParams } from '../perfil/interfaces/perfil-interfaces';
@@ -22,26 +23,32 @@ import { usuariosParams } from './interfaces/usuarios-interfaces';
     FormsModule,
     FloatLabel,
     InputTextModule,
-    InputNumberModule
+    InputNumberModule,
+    TableModule
   ],
   standalone: true,
   templateUrl: './usuarios.html',
   styleUrl: './usuarios.css',
 })
 export class Usuarios implements OnInit {
-  constructor(private perfilService: PerfilService, private usuariosServices: UsuariosServices) { }
+  constructor(
+    private perfilService: PerfilService,
+    private usuariosServices: UsuariosServices,
+    private cdr: ChangeDetectorRef) { }
   perfiles: any[] = [];
+  usuarios: any[] = [];
   perfilSeleccionado: any = null;
   Nombres: string | undefined;
   ApellidoP: string | undefined;
   ApellidoM: string | undefined;
   Usuario: string | undefined
-  Telefono: number | null = null;
+  Telefono: string | undefined;
   Contrasena: string | undefined;
   correo: string | undefined;
 
   ngOnInit(): void {
     this.cargarPerfil();
+    this.cargarUsuarios();
   }
 
   cargarPerfil() {
@@ -53,8 +60,8 @@ export class Usuarios implements OnInit {
     this.perfilService.getPerfil(parametros).subscribe({
       next: (response: any) => {
         console.log('Perfil cargado:', response);
-
-        this.perfiles = response.results; // ✅ aquí está el array
+        this.perfiles = response.results; // ✅ Sin setTimeout.
+        this.cdr.detectChanges();
       },
       error: (err) => console.error(err)
     });
@@ -71,7 +78,7 @@ export class Usuarios implements OnInit {
       nombre: this.Nombres || '',
       apellidoP: this.ApellidoP || '',
       apellidoM: this.ApellidoM || '',
-      telefono: this.Telefono ,
+      telefono: this.Telefono ? this.Telefono.toString() : '',
       correo: this.correo || '',
       idPerfil: this.perfilSeleccionado || 0
     }
@@ -86,7 +93,7 @@ export class Usuarios implements OnInit {
         this.ApellidoP = '';
         this.ApellidoM = '';
         this.Usuario = '';
-        this.Telefono = null;
+        this.Telefono = '';
         this.Contrasena = '';
         this.correo = '';
         this.perfilSeleccionado = null;
@@ -97,9 +104,28 @@ export class Usuarios implements OnInit {
       }
     });
   }
+
   onPerfilChange(event: any) {
     console.log("Evento del select:", event);
     console.log("perfilSeleccionado:", this.perfilSeleccionado);
   }
 
+  cargarUsuarios() {
+
+    const parametros = {
+      opcion: 1
+    };
+
+    this.usuariosServices.mostrarUsuarios(parametros).subscribe({
+      next: (response: any) => {
+        console.log("Usuarios:", response);
+        this.usuarios = response.results;
+        this.cdr.detectChanges(); // 👈 también aquí
+      },
+      error: (err) => {
+        console.error("Error al cargar usuarios", err);
+      }
+    });
+
+  }
 }

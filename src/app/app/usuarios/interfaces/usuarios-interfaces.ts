@@ -4,7 +4,7 @@ export interface usuariosParams{
     nombre: string;
     apellidoP: string;
     apellidoM: string;
-    telefono: number | null;
+    telefono: string | null;
     correo: string;
     idPerfil: number;
 }
