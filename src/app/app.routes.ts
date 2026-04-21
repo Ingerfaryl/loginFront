@@ -1,8 +1,6 @@
 import { Routes } from '@angular/router';
 import { Dashboard } from './app/dashboard/dashboard';
 import { AuthGuard } from './auth/auth-guard';
-import { Reportes } from './app/reportes/reportes';
-import { Usuarios } from './app/usuarios/usuarios';
 import { PermisosGuard } from './auth/permisos-guard';
 import { NoAuthGuard } from './auth/no-auth-guard';
 
@@ -10,12 +8,12 @@ export const routes: Routes = [
   {
     path: 'auth',
     canActivate: [NoAuthGuard],
-    loadChildren: () =>
-      import('./auth/auth-routes').then((m) => m.AUTH_ROUTES),
+    // Asumiendo que AUTH_ROUTES es un array de rutas standalone
+    loadChildren: () => import('./auth/auth-routes').then((m) => m.AUTH_ROUTES),
   },
   {
     path: 'dashboard',
-    component: Dashboard,
+    component: Dashboard, // El Layout principal que contiene el Sidebar y Navbar
     canActivate: [AuthGuard],
     children: [
       {
@@ -26,15 +24,26 @@ export const routes: Routes = [
       {
         path: 'reportes',
         canActivate: [PermisosGuard],
-        loadComponent: () =>
-          import('./app/reportes/reportes').then(m => m.Reportes),
+        loadComponent: () => import('./app/reportes/reportes').then(m => m.Reportes),
+      },
+      {
+        path: 'accesos',
+        canActivate: [PermisosGuard],
+        loadComponent: () => import('./app/accesos/accesos').then(m => m.Accesos),
+      },
+      // Opcional: Una ruta por defecto dentro del dashboard para que no quede en blanco
+      {
+        path: '',
+        redirectTo: 'reportes', // o a una vista de inicio
+        pathMatch: 'full'
       }
     ]
   },
   {
     path: 'admin',
-    loadChildren: () =>
-      import('./admin/admin-module').then((m) => m.AdminModule),
+    // Si AdminModule sigue siendo un NgModule antiguo, esto está bien. 
+    // Si lo migraste a standalone, cámbialo a loadComponent o carga un array de rutas.
+    loadChildren: () => import('./admin/admin-module').then((m) => m.AdminModule),
     canActivate: [PermisosGuard]
   },
   {

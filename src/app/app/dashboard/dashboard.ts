@@ -70,6 +70,7 @@ export class Dashboard implements OnInit {
       case 'dashboard': return 'pi pi-home';
       case 'usuarios': return 'pi pi-users';
       case 'reportes': return 'pi pi-chart-bar';
+      case 'accesos': return 'pi pi-cog';
       default: return 'pi pi-folder';
     }
   }

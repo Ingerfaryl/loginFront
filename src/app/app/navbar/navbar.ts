@@ -33,6 +33,7 @@ import { AuthService } from '../../auth/login/services/login';
 })
 
 export class NavbarComponent implements OnInit {
+  @Output() onToggleSidebar = new EventEmitter<void>();
   userInitial: string = '';
   userName: string = '';
   userEmail: string = '';
@@ -57,6 +58,9 @@ export class NavbarComponent implements OnInit {
       this.userEmail = 'invitado@ejemplo.com';
       this.userInitial = 'I';
     }
+  }
+  toggleMenu(): void {
+    this.onToggleSidebar.emit();
   }
 
   goToProfile(popover: any): void {
