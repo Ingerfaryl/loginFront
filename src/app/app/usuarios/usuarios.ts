@@ -7,9 +7,10 @@ import { FormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { TableModule } from 'primeng/table';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 import { PerfilService } from '../perfil/services/perfil';
-import { perfilParams } from '../perfil/interfaces/perfil-interfaces';
 import { UsuariosServices } from './services/usuarios-services';
 import { usuariosParams } from './interfaces/usuarios-interfaces';
 
@@ -60,7 +61,7 @@ export class Usuarios implements OnInit {
     this.perfilService.getPerfil(parametros).subscribe({
       next: (response: any) => {
         console.log('Perfil cargado:', response);
-        this.perfiles = response.results; // ✅ Sin setTimeout.
+        this.perfiles = response.results;
         this.cdr.detectChanges();
       },
       error: (err) => console.error(err)
@@ -88,7 +89,6 @@ export class Usuarios implements OnInit {
         console.log("Usuario registrado:", res);
         alert("✅ Usuario registrado correctamente");
 
-        // Limpiar formulario
         this.Nombres = '';
         this.ApellidoP = '';
         this.ApellidoM = '';
@@ -120,12 +120,37 @@ export class Usuarios implements OnInit {
       next: (response: any) => {
         console.log("Usuarios:", response);
         this.usuarios = response.results;
-        this.cdr.detectChanges(); // 👈 también aquí
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error("Error al cargar usuarios", err);
       }
     });
 
+  }
+  exportarPDF() {
+    //console.log("CLICK PDF");
+    const doc = new jsPDF();
+
+    doc.setFontSize(16);
+    doc.text('Lista de Usuarios', 14, 15);
+
+    autoTable(doc, {
+      startY: 25,
+      head: [['Usuario', 'Nombre', 'Apellido P', 'Apellido M', 'Correo', 'Teléfono', 'Activo']],
+      body: this.usuarios.map(u => [
+        u.usuario,
+        u.nombre,
+        u.apellido_p,
+        u.apellido_m,
+        u.correo,
+        u.telefono,
+        u.flgActivo ? 'Sí' : 'No'
+      ]),
+      styles: { fontSize: 9 },
+      headStyles: { fillColor: [41, 128, 185] }
+    });
+
+    doc.save('usuarios.pdf');
   }
 }
