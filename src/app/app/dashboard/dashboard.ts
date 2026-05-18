@@ -60,17 +60,18 @@ export class Dashboard implements OnInit {
       .filter(p => p.puedeVer === true)
       .map(p => ({
         label: p.nombreVentana,
-        icon: this.getIcon(p.nombreVentana),
+        icon: this.getIcon(p.ruta),
         routerLink: p.ruta
       }));
   }
 
-  getIcon(nombreVentana: string): string {
-    switch (nombreVentana.toLowerCase()) {
-      case 'dashboard': return 'pi pi-home';
+  getIcon(ruta: string): string {
+    switch (ruta.toLowerCase()) {
+      case '/dashboard': return 'pi pi-home';
       case 'usuarios': return 'pi pi-users';
       case 'reportes': return 'pi pi-chart-bar';
       case 'accesos': return 'pi pi-cog';
+      case 'ordencompra': return 'pi pi-credit-card';
       default: return 'pi pi-folder';
     }
   }

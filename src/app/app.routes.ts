@@ -31,6 +31,11 @@ export const routes: Routes = [
         canActivate: [PermisosGuard],
         loadComponent: () => import('./app/accesos/accesos').then(m => m.Accesos),
       },
+      {
+        path: 'ordenCompra',
+        canActivate: [PermisosGuard],
+        loadComponent: () => import('./app/orden-compra/orden-compra').then(m => m.OrdenCompra),
+      },
       // Opcional: Una ruta por defecto dentro del dashboard para que no quede en blanco
       {
         path: '',
